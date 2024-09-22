@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { addNewTodo, deleteTodo, getTodoList, updateTodo } from '../../services';
 import { LayoutTodoList } from '../LayoutTodoList/LayoutTodoList';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigation } from '../Navigation/Navigation';
+import { CardTodo } from '../CardTodo/CardTodo';
+import { NotFound } from '../NotFound/NotFound';
 
 export const ContainerTodoList = () => {
 	const [refreshData, setRefreshData] = useState(false);
@@ -10,11 +14,6 @@ export const ContainerTodoList = () => {
 	const [userSearch, setUserSearch] = useState('');
 	function onAddTodoClick() {
 		addNewTodo(setRefreshData, { title: nameTodo, completed: false });
-	}
-	function onDescriptionUpdateClick() {
-		updateTodo(setRefreshData, selectedTodo?.dataset?.id, {
-			title: nameTodo,
-		});
 	}
 	function onCheckedClick({ target }) {
 		const el = target.closest('.todoList__todo');
@@ -30,50 +29,18 @@ export const ContainerTodoList = () => {
 	useEffect(() => {
 		getTodoList(setTodoList, userSearch);
 	}, [refreshData, userSearch]);
-
-	function onDeleteTodoClick() {
-		deleteTodo(setRefreshData, selectedTodo?.dataset?.id);
-	}
-
-	const onTodoClick = (event) => {
-		event.preventDefault();
-		const { target } = event;
-		if (target.classList.contains('todo__completed')) return;
-
-		//Нахожу родительский элемент (элемент списка) т.к. в target могут попасть и дочерние элементы
-		const todo = target.closest('.todoList__todo');
-		setSelectedTodo(todo);
-		//Делаю глубокое копирование чтобы не мутировать тек. массив
-		let deepCopyTodoList = JSON.parse(JSON.stringify(todoList));
-		//Нахожу по id в массиве выбранный элемент
-		const indexTodo = deepCopyTodoList.findIndex((t) => t.id === Number(todo.dataset.id));
-		//Вырезаю его из массива
-		const currentTodoCopy = deepCopyTodoList.splice(indexTodo, 1)[0];
-		//Меняю selected
-		currentTodoCopy.selected = !currentTodoCopy.selected;
-		//Проверяю чтобы в массиве больше не было выбранных элементов
-		deepCopyTodoList = deepCopyTodoList.map((todo) => {
-			if (todo.selected === true) todo.selected = false;
-			return todo;
-		});
-		//Вставляю изменённый элемент назад в массив на своё место
-		deepCopyTodoList = deepCopyTodoList.toSpliced(indexTodo, 0, currentTodoCopy);
-		//Обновляю тек. массив
-		setTodoList(deepCopyTodoList);
-	};
-
 	return (
-		<LayoutTodoList
-			todoList={todoList}
-			setTodoList={setTodoList}
-			setNameTodo={setNameTodo}
-			setSelectedTodo={setSelectedTodo}
-			onAddClick={onAddTodoClick}
-			onDescriptionUpdateClick={onDescriptionUpdateClick}
-			onDeleteClick={onDeleteTodoClick}
-			onCheckedClick={onCheckedClick}
-			onTodoClick={onTodoClick}
-			onSelectChange={onSelectChange}
-		/>
+		<div className="container">
+			<Navigation setNameTodo={setNameTodo} onAddClick={onAddTodoClick} onSelectChange={onSelectChange} />
+			<Routes>
+				<Route path="/" element={<LayoutTodoList todoList={todoList} onCheckedClick={onCheckedClick} />} />
+				<Route
+					path="/task/:id"
+					element={<CardTodo setRefreshData={setRefreshData} nameTodo={nameTodo} todoList={todoList} />}
+				/>
+				<Route path="*" element={<Navigate to="/404" />} />
+				<Route path="/404" element={<NotFound />} />
+			</Routes>
+		</div>
 	);
 };

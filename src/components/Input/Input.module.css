@@ -1,6 +1,6 @@
 .input-container {
 	border-bottom: 1px solid var(--main-color);
-	padding-bottom: 7px;
+	padding: 7px;
 	display: flex;
 	gap: 10px;
 	width: 100%;
@@ -15,10 +15,15 @@
 		width: 100%;
 	}
 	.input-container__label {
+		color: var(--main-color);
 		width: max-content;
 		white-space: nowrap;
 	}
 	.input-container__input:focus {
 		border: 1px solid var(--main-color);
+	}
+	.input-container__input:disabled {
+		background-color: var(--main-color);
+		position: relative;
 	}
 }

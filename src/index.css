@@ -3,6 +3,7 @@
 	--disabled-color: #cfcfcf;
 	--error-color: #d40000;
 	--main-color: #cbc5a0;
+	--border-radius: 15px;
 }
 .hidden {
 	display: none;
@@ -10,6 +11,7 @@
 * {
 	font-family: 'Permanent Marker';
 }
+
 #root {
 	height: 100vh;
 	display: flex;
