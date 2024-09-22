@@ -1,0 +1,24 @@
+.input-container {
+	border-bottom: 1px solid var(--main-color);
+	padding-bottom: 7px;
+	display: flex;
+	gap: 10px;
+	width: 100%;
+	align-items: center;
+	.input-container__input {
+		margin-top: 5px;
+		border: 1px solid var(--main-color);
+		border-radius: 4px;
+		background-color: black;
+		color: var(--main-color);
+		padding: 0;
+		width: 100%;
+	}
+	.input-container__label {
+		width: max-content;
+		white-space: nowrap;
+	}
+	.input-container__input:focus {
+		border: 1px solid var(--main-color);
+	}
+}

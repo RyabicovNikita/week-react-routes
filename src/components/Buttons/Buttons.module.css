@@ -1,0 +1,17 @@
+.button {
+	margin: 0;
+	padding: 3px;
+	background-color: var(--main-color);
+	border: 0;
+	border-radius: 8px;
+	width: calc(33.333333%);
+	margin-left: 5px;
+	margin-right: 5px;
+	cursor: pointer;
+}
+.button:hover:not(:disabled) {
+	background-color: black;
+	color: var(--main-color);
+	transition: 0.2s;
+	box-shadow: 0px 0px 5px white;
+}

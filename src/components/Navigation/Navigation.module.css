@@ -1,0 +1,14 @@
+.navigation {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	align-items: center;
+	.navigation__buttons {
+		width: 100%;
+		display: flex;
+		gap: 5px;
+		justify-content: space-between;
+		border-bottom: 1px solid var(--main-color);
+		padding-bottom: 7px;
+	}
+}
