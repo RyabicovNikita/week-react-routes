@@ -49,6 +49,7 @@ body {
 			height: 24px;
 			border-radius: 8px;
 			.todo__completed {
+				min-width: 15px;
 				margin-right: 7px;
 				margin-left: 4px;
 				border-radius: 5px;
@@ -75,9 +76,14 @@ body {
 				transform: translateY(-5px);
 			}
 			.todo__description {
+				color: var(--main-color);
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
+			}
+			.todo_link {
+				text-decoration: none;
+				display: inline-grid;
 			}
 		}
 	}

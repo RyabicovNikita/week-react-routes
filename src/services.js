@@ -7,11 +7,21 @@ export const mergeClasses = (classes, separator = ' ') => {
 	return className;
 };
 
-export const getTodoList = (setTodoList, search = '') => {
+export const getTodoList = (setTodoList, search = '', setIsLoading) => {
+	setIsLoading(true);
 	fetch(`http://localhost:3005/todos/${search}`)
 		.then((res) => res.json())
 		.then((result) => setTodoList(result))
-		.catch((error) => console.error(error));
+		.catch((error) => console.error(error))
+		.finally(() => setIsLoading(false));
+};
+
+export const getTodoByID = async (id) => {
+	const responsible = await fetch(`http://localhost:3005/todos/${id}`, {
+		method: 'GET',
+		headers: { 'Content-Type': 'application/json;charset=utf-8' },
+	});
+	return await responsible.json();
 };
 
 export const addNewTodo = (setRefreshData, data) => {
@@ -28,26 +38,19 @@ export const addNewTodo = (setRefreshData, data) => {
 		.finally(() => setRefreshData((prevState) => !prevState));
 };
 
-export const updateTodo = (setRefreshData, id, data) => {
-	let newDataJSONFormat = {};
-	if (data?.title?.length > 0) newDataJSONFormat.title = data.title;
-	if (typeof data?.completed !== 'undefined') newDataJSONFormat.completed = data.completed;
-
+export const updateTodo = (id, data) => {
 	fetch(`http://localhost:3005/todos/${id}`, {
 		method: 'PATCH',
 		headers: { 'Content-Type': 'application/json;charset=utf-8' },
-		body: JSON.stringify(newDataJSONFormat),
-	})
-		.catch((error) => console.error(error))
-		.finally(() => setRefreshData((prevState) => !prevState));
+		body: JSON.stringify(data),
+	}).catch((error) => console.error(error));
+	// .finally(() => setRefreshData((prevState) => !prevState));
 };
 
-export const deleteTodo = (setRefreshData, id) => {
+export const deleteTodo = (id) => {
 	fetch(`http://localhost:3005/todos/${id}`, {
 		method: 'DELETE',
-	})
-		.catch((error) => console.error(error))
-		.finally(() => setRefreshData((prevState) => !prevState));
+	}).catch((error) => console.error(error));
 };
 
 export function debounce(callback, timeOut) {

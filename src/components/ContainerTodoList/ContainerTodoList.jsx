@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { addNewTodo, deleteTodo, getTodoList, updateTodo } from '../../services';
+import { addNewTodo, deleteTodo, getTodoByID, getTodoList, updateTodo } from '../../services';
 import { LayoutTodoList } from '../LayoutTodoList/LayoutTodoList';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Navigation } from '../Navigation/Navigation';
@@ -7,37 +7,28 @@ import { CardTodo } from '../CardTodo/CardTodo';
 import { NotFound } from '../NotFound/NotFound';
 
 export const ContainerTodoList = () => {
-	const [refreshData, setRefreshData] = useState(false);
-	const [todoList, setTodoList] = useState();
-	const [nameTodo, setNameTodo] = useState('');
-	const [selectedTodo, setSelectedTodo] = useState(null);
+	const [newNameTodo, setNewNameTodo] = useState('');
 	const [userSearch, setUserSearch] = useState('');
+	const [updateList, setUpdateList] = useState(false);
 	function onAddTodoClick() {
-		addNewTodo(setRefreshData, { title: nameTodo, completed: false });
-	}
-	function onCheckedClick({ target }) {
-		const el = target.closest('.todoList__todo');
-		const todo = todoList.find((t) => t.id === Number(el?.dataset?.id));
-		todo.completed = !todo.completed;
-		updateTodo(setRefreshData, el?.dataset?.id, todo);
+		addNewTodo(setUpdateList, { title: newNameTodo, completed: false });
 	}
 
 	function onSelectChange({ target }) {
 		setUserSearch(`?q=${target.value}`);
 	}
 
-	useEffect(() => {
-		getTodoList(setTodoList, userSearch);
-	}, [refreshData, userSearch]);
 	return (
 		<div className="container">
-			<Navigation setNameTodo={setNameTodo} onAddClick={onAddTodoClick} onSelectChange={onSelectChange} />
+			<Navigation setNameTodo={setNewNameTodo} onAddClick={onAddTodoClick} onSelectChange={onSelectChange} />
 			<Routes>
-				<Route path="/" element={<LayoutTodoList todoList={todoList} onCheckedClick={onCheckedClick} />} />
 				<Route
-					path="/task/:id"
-					element={<CardTodo setRefreshData={setRefreshData} nameTodo={nameTodo} todoList={todoList} />}
+					path="/"
+					element={
+						<LayoutTodoList userSearch={userSearch} updateList={updateList} setUpdateList={setUpdateList} />
+					}
 				/>
+				<Route path="/task/:id" element={<CardTodo />} />
 				<Route path="*" element={<Navigate to="/404" />} />
 				<Route path="/404" element={<NotFound />} />
 			</Routes>

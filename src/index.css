@@ -11,6 +11,9 @@
 * {
 	font-family: 'Permanent Marker';
 }
+p {
+	color: var(--main-color);
+}
 
 #root {
 	height: 100vh;

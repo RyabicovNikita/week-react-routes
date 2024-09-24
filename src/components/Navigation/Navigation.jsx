@@ -8,6 +8,7 @@ import styles from './Navigation.module.css';
 export const Navigation = ({ setNameTodo, onAddClick, onSelectChange }) => {
 	const isTodoOpen = useMatch('/task/:id');
 	const is404 = useMatch('/404');
+
 	return (
 		<div className={styles.navigation}>
 			<Input
